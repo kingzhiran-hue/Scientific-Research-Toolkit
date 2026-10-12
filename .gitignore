@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+build/
+dist/
+outputs/
+user_data/
+user_outputs/
+.Rhistory
+.RData
+.Renviron
+renv/library/
+renv/staging/
+.DS_Store
