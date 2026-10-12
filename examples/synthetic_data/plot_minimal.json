@@ -1,0 +1,10 @@
+{
+  "title": "Synthetic minimal comparison",
+  "xlab": "Synthetic units",
+  "width": 10,
+  "dpi": 300,
+  "show_CI": false,
+  "show_PI": false,
+  "show_I2": false,
+  "legend": false
+}

@@ -1,0 +1,43 @@
+{
+  "segments": [
+    {
+      "id": "high",
+      "ticks": [
+        {
+          "pixel_y": 120,
+          "value": 12
+        },
+        {
+          "pixel_y": 310,
+          "value": 8
+        }
+      ]
+    },
+    {
+      "id": "low",
+      "ticks": [
+        {
+          "pixel_y": 380,
+          "value": 2
+        },
+        {
+          "pixel_y": 530,
+          "value": 0
+        }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "id": "Broken_sample",
+      "x": 260,
+      "bar_y": 430,
+      "upper_y": 410,
+      "lower_y": 450,
+      "segment": "low",
+      "variance_type": "SEM",
+      "n": 9,
+      "confirmed": true
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+id,independence_id,independent,shared_control,control_id,construct,unit,mean_t,mean_c,error_t,error_c,error_type_t,error_type_c,n_t,n_c,risk,setting
+Synthetic_1,Cohort_1,True,False,Control_1,Synthetic continuous outcome,synthetic_units,10.0,9.3,1.8,2.1,SD,SD,18,18,LOW,early
+Synthetic_2,Cohort_2,True,False,Control_2,Synthetic continuous outcome,synthetic_units,12.0,11.8,2.3,1.7,SD,SD,24,22,HIGH,early
+Synthetic_3,Cohort_3,True,False,Control_3,Synthetic continuous outcome,synthetic_units,8.0,9.0,1.5,1.8,SD,SD,16,16,LOW,delayed
+Synthetic_4,Cohort_4,True,False,Control_4,Synthetic continuous outcome,synthetic_units,9.0,9.8,2.0,2.2,SD,SD,28,26,LOW,delayed
+Synthetic_5,Cohort_5,True,False,Control_5,Synthetic continuous outcome,synthetic_units,11.0,10.1,2.5,2.3,SD,SD,21,21,LOW,early
+Synthetic_6,Cohort_6,True,False,Control_6,Synthetic continuous outcome,synthetic_units,9.0,10.3,1.9,2.4,SD,SD,30,28,LOW,delayed

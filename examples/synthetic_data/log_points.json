@@ -1,0 +1,64 @@
+{
+  "unit": "synthetic_units",
+  "plot_region": [
+    80,
+    90,
+    830,
+    560
+  ],
+  "segments": [
+    {
+      "id": "main",
+      "scale": "log10",
+      "ticks": [
+        {
+          "pixel_y": 530,
+          "value": 1
+        },
+        {
+          "pixel_y": 330,
+          "value": 10
+        },
+        {
+          "pixel_y": 130,
+          "value": 100
+        }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "id": "Group_1",
+      "x": 260,
+      "bar_y": 330,
+      "upper_y": 305,
+      "lower_y": 355,
+      "variance_type": "CI",
+      "n": 12,
+      "confirmed": true,
+      "unit": "synthetic_units"
+    },
+    {
+      "id": "Group_2",
+      "x": 460,
+      "bar_y": 270,
+      "upper_y": 245,
+      "lower_y": 295,
+      "variance_type": "CI",
+      "n": 12,
+      "confirmed": true,
+      "unit": "synthetic_units"
+    },
+    {
+      "id": "Group_3",
+      "x": 660,
+      "bar_y": 410,
+      "upper_y": 385,
+      "lower_y": 435,
+      "variance_type": "CI",
+      "n": 12,
+      "confirmed": true,
+      "unit": "synthetic_units"
+    }
+  ]
+}

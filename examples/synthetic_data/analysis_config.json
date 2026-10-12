@@ -1,0 +1,25 @@
+{
+  "subsets": [
+    {
+      "name": "exclude_high_risk",
+      "exclude": true,
+      "where": [
+        {
+          "field": "risk",
+          "operator": "eq",
+          "value": "HIGH"
+        }
+      ]
+    },
+    {
+      "name": "delayed_subset",
+      "where": [
+        {
+          "field": "setting",
+          "operator": "eq",
+          "value": "delayed"
+        }
+      ]
+    }
+  ]
+}

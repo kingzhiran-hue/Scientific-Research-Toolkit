@@ -1,0 +1,11 @@
+{
+  "title": "Synthetic continuous-outcome analysis",
+  "xlab": "Difference in synthetic units",
+  "font": "sans",
+  "width": 10,
+  "font_size": 10,
+  "dpi": 600,
+  "show_CI": true,
+  "show_PI": true,
+  "show_I2": true
+}

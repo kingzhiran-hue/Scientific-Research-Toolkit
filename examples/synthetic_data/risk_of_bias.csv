@@ -1,0 +1,21 @@
+study,domain,judgment
+Sample 1,Sequence,UNCLEAR
+Sample 1,Masking,HIGH
+Sample 1,Missing outcomes,LOW
+Sample 1,Reporting,NR
+Sample 2,Sequence,HIGH
+Sample 2,Masking,LOW
+Sample 2,Missing outcomes,NR
+Sample 2,Reporting,LOW
+Sample 3,Sequence,LOW
+Sample 3,Masking,NR
+Sample 3,Missing outcomes,LOW
+Sample 3,Reporting,UNCLEAR
+Sample 4,Sequence,NR
+Sample 4,Masking,LOW
+Sample 4,Missing outcomes,UNCLEAR
+Sample 4,Reporting,HIGH
+Sample 5,Sequence,LOW
+Sample 5,Masking,UNCLEAR
+Sample 5,Missing outcomes,HIGH
+Sample 5,Reporting,LOW

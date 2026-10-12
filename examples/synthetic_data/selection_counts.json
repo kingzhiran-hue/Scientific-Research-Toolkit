@@ -1,0 +1,11 @@
+{
+  "identified": 240,
+  "duplicates": 70,
+  "screened": 170,
+  "title_excluded": 125,
+  "sought": 45,
+  "not_retrieved": 3,
+  "assessed": 42,
+  "fulltext_excluded": 28,
+  "included": 14
+}

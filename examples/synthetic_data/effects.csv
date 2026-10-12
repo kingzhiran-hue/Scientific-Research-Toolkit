@@ -1,0 +1,6 @@
+id,independence_id,independent,unit,yi,vi
+Effect_1,Effect_cohort_1,True,synthetic_units,0.2,0.04
+Effect_2,Effect_cohort_2,True,synthetic_units,-0.5,0.08
+Effect_3,Effect_cohort_3,True,synthetic_units,1.1,0.12
+Effect_4,Effect_cohort_4,True,synthetic_units,-0.2,0.06
+Effect_5,Effect_cohort_5,True,synthetic_units,0.8,0.05
