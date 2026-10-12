@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata from this file."
+type: software
+title: "Scientific Research Toolkit"
+version: 0.1.0
+authors:
+  - family-names: Jin
+    given-names: Jie
+license: MIT
+abstract: "Semi-manual image digitization, independent continuous-outcome meta-analysis and configurable scientific figures."
