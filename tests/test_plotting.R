@@ -1,0 +1,25 @@
+source('environment/bootstrap.R')
+source('plotting/core.R')
+count<-0;check<-function(ok,name){if(!isTRUE(ok))stop(name);count<<-count+1;cat('PASS:',name,'\n')}
+reject<-function(f,name)check(inherits(tryCatch({f();NULL},error=function(e)e),'error'),name)
+cfg<-jsonlite::fromJSON('examples/synthetic_data/plot_config.json')
+effects<-read.csv('outputs/meta/effects.csv');spec<-read.csv('outputs/meta/specifications.csv');loo<-read.csv('outputs/meta/leave_one_out.csv')
+check(nrow(effects)==6&&nrow(loo)==6,'All synthetic comparisons present')
+crit<-qnorm(.975);check(max(abs(effects$ci_low-(effects$yi-crit*sqrt(effects$vi))))<1e-12,'Individual effect intervals equal provided analysis')
+bad<-spec;bad$ci_low[1]<-bad$ci_high[1]+1;reject(function()valid_intervals(bad),'Invalid intervals rejected')
+bad<-spec;bad$ci_high[1]<-Inf;reject(function()valid_intervals(bad),'Infinite CI rejected')
+bad<-spec;bad$pi_low[1]<-bad$pi_high[1]+1;reject(function()valid_intervals(bad),'Reversed PI rejected')
+check(plot_options(list(legend_labels=list(CI='Confidence interval')))$legend_labels$CI=='Confidence interval','Custom legend text applied')
+bad<-read.csv('examples/synthetic_data/risk_of_bias.csv');bad<-rbind(bad,bad[1,]);reject(function()validate_rob(bad),'Duplicate RoB cell rejected')
+bad<-jsonlite::fromJSON('examples/synthetic_data/selection_counts.json');bad$screened<-bad$screened+1;reject(function()prisma_plot(bad,'outputs/tests/bad_prisma'),'Inconsistent PRISMA counts rejected')
+bad<-read.csv('examples/synthetic_data/evidence.csv');bad[1,2]<-'FAVORABLE';reject(function()evidence_plot(bad,'outputs/tests/bad_evidence'),'Evidence direction must be observed code')
+for(kind in c('forest','sensitivity','loo','rob-summary','rob-matrix','evidence','prisma','comparison')){
+ for(ext in c('pdf','svg','png'))check(file.exists(paste0('outputs/figures/',kind,'.',ext)),paste('Generated',kind,ext))
+}
+minimal<-jsonlite::fromJSON('examples/synthetic_data/plot_minimal.json');spec$label<-spec$analysis;interval_plot(spec,'outputs/tests/minimal',minimal)
+long<-spec;long$label<-paste(long$analysis,'a deliberately long synthetic comparison label for checking wrapping')
+interval_plot(long,'outputs/tests/long_labels',cfg)
+single<-effects[1,,drop=FALSE];single$estimate<-single$yi;single$label<-single$id
+pooled<-list(estimate=single$yi,CI=c(NA,NA),PI=c(NA,NA),k=1,I2=NA,method='REML');interval_plot(single,'outputs/tests/single_effect',cfg,pooled)
+check(file.exists('outputs/tests/minimal.pdf')&&file.exists('outputs/tests/long_labels.pdf')&&file.exists('outputs/tests/single_effect.pdf'),'Optional elements, wrapping and k1 drawings')
+jsonlite::write_json(list(PASS=TRUE,checks=count),'outputs/tests/plotting_test_summary.json',pretty=TRUE,auto_unbox=TRUE)
