@@ -1,0 +1,17 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Scientific point editor</title>
+<style>body{font:16px Arial;margin:24px;color:#25343b}button,select{padding:8px;margin:5px}canvas{border:1px solid #bbb;max-width:100%;height:auto}textarea{width:95%;height:180px;font:13px monospace}#message{white-space:pre-wrap}</style>
+<h1>Scientific figure point editor</h1><p>Select a group and coordinate, then click the original image. Confirm group attribution, n, and error type from your source. Tick calibration can be edited in the configuration. This tool does not infer SD/SEM or sample size.</p>
+<label for="group">Group</label><select id="group"></select><label for="field">Coordinate</label><select id="field"><option>x</option><option>bar_y</option><option>upper_y</option><option>lower_y</option></select>
+<label><input type="checkbox" id="confirmed">I checked this group's points against the original figure</label><br>
+<canvas id="canvas"></canvas><h2>Coordinate configuration</h2><textarea id="config"></textarea><br><button id="apply">Apply edited configuration</button><button id="save">Save confirmed measurements and overlay locally</button><p id="message"></p>
+<script>
+let cfg,image=new Image();const canvas=document.querySelector('#canvas'),ctx=canvas.getContext('2d'),groups=document.querySelector('#group'),editor=document.querySelector('#config'),check=document.querySelector('#confirmed');
+function redraw(){document.querySelector('#message').textContent='Configuration changed. Confirm groups and save to update measurements.';ctx.drawImage(image,0,0);for(const g of cfg.groups){ctx.strokeStyle=g.confirmed?'#00765A':'#B67B29';for(const key of ['bar_y','upper_y','lower_y'])if(g[key]!=null){ctx.beginPath();ctx.moveTo(g.x-12,g[key]);ctx.lineTo(g.x+12,g[key]);ctx.stroke();}ctx.fillText(g.id,g.x+15,g.bar_y);}editor.value=JSON.stringify(cfg,null,2);check.checked=!!cfg.groups[groups.selectedIndex].confirmed;}
+function populate(){groups.replaceChildren(...cfg.groups.map(g=>{let o=document.createElement('option');o.textContent=g.id;return o;}));redraw();}
+fetch('/config').then(r=>r.json()).then(c=>{cfg=c;image.onload=()=>{canvas.width=image.naturalWidth;canvas.height=image.naturalHeight;populate();};image.src='/image';});
+canvas.onclick=e=>{const rect=canvas.getBoundingClientRect(),x=(e.clientX-rect.left-canvas.clientLeft)*canvas.width/(rect.width-2*canvas.clientLeft),y=(e.clientY-rect.top-canvas.clientTop)*canvas.height/(rect.height-2*canvas.clientTop),g=cfg.groups[groups.selectedIndex],key=document.querySelector('#field').value;g[key]=key==='x'?x:y;g.confirmed=false;redraw();};
+editor.oninput=()=>{document.querySelector('#message').textContent='Configuration edited. Apply or save after verifying all points.';};
+groups.onchange=redraw;check.onchange=()=>{cfg.groups[groups.selectedIndex].confirmed=check.checked;redraw();};
+document.querySelector('#apply').onclick=()=>{try{cfg=JSON.parse(editor.value);populate();}catch(e){document.querySelector('#message').textContent=e.message;}};
+document.querySelector('#save').onclick=async()=>{try{cfg=JSON.parse(editor.value);const r=await fetch('/save',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(cfg)});document.querySelector('#message').textContent=JSON.stringify(await r.json(),null,2);}catch(e){document.querySelector('#message').textContent=e.message;}};
+</script></html>
