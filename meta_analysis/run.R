@@ -1,0 +1,25 @@
+if(.Platform$OS.type=='windows')invisible(Sys.setlocale('LC_CTYPE','English_United States.utf8'))
+args<-commandArgs(trailingOnly=TRUE)
+filearg<-grep('^--file=',commandArgs(),value=TRUE)[1];root<-dirname(dirname(normalizePath(sub('^--file=','',filearg))))
+source(file.path(root,'environment/bootstrap.R'))
+source(file.path(root,'meta_analysis/core.R'))
+if(!requireNamespace('jsonlite',quietly=TRUE))stop('Install jsonlite before running this module')
+parse_args<-function(a){if(length(a)%%2)stop('Arguments must be --name value pairs');setNames(as.list(a[seq(2,length(a),2)]),sub('^--','',a[seq(1,length(a),2)]))}
+opt<-parse_args(args);if(is.null(opt$input)||is.null(opt$out))stop('Usage: Rscript meta_analysis/run.R --input FILE --out DIR [--measure MD|Hedges_g --input-type groups|effects --method REML|PM|DL --config JSON]')
+default<-function(x,d)if(is.null(x))d else x
+options(digits=17)
+z<-read.csv(opt$input,check.names=FALSE,na.strings=c('','NA'),stringsAsFactors=FALSE)
+cfg<-if(is.null(opt$config))list()else jsonlite::fromJSON(opt$config,simplifyVector=FALSE)
+z<-effect_sizes(z,default(opt$measure,'MD'),default(opt[['input-type']],'groups'),default(opt[['g-correction']],'approx'),default(opt[['g-variance']],'df'))
+level<-as.numeric(default(opt$level,'0.95'));method<-default(opt$method,'REML');all<-run_specifications(z,method,level,cfg)
+dir.create(opt$out,recursive=TRUE,showWarnings=FALSE)
+parameters<-list(input_name=basename(opt$input),input_md5=unname(tools::md5sum(opt$input)),input_type=default(opt[['input-type']],'groups'),measure=default(opt$measure,'MD'),g_correction=default(opt[['g-correction']],'approx'),g_variance=default(opt[['g-variance']],'df'),method=method,level=level,subsets=cfg$subsets,inference='unmodified_HKSJ',PI='Riley_df_k_minus_2',independence='required_user_declaration_and_duplicate_cohort_checks')
+jsonlite::write_json(list(parameters=parameters,results=all),file.path(opt$out,'results.json'),pretty=TRUE,auto_unbox=TRUE,digits=NA,na='null')
+crit<-qnorm((1+level)/2);z$ci_low<-z$yi-crit*sqrt(z$vi);z$ci_high<-z$yi+crit*sqrt(z$vi);z$weight_pct<-all$primary$weights
+write.csv(z,file.path(opt$out,'effects.csv'),row.names=FALSE,na='')
+main<-do.call(rbind,lapply(c('primary','PM','DL'),function(n)summary_row(all[[n]],n)))
+if(length(all$custom))main<-rbind(main,do.call(rbind,lapply(names(all$custom),function(n)summary_row(all$custom[[n]],n))))
+write.csv(main,file.path(opt$out,'specifications.csv'),row.names=FALSE,na='')
+loo<-if(length(all$leave_one_out))do.call(rbind,lapply(names(all$leave_one_out),function(n)summary_row(all$leave_one_out[[n]],paste('Omit',n))))else main[0,]
+write.csv(loo,file.path(opt$out,'leave_one_out.csv'),row.names=FALSE,na='')
+cat('Analysis completed; effects:',nrow(z),'\n')
