@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "scientific-research-toolkit"
+version = "0.1.0"
+description = "Semi-manual figure digitization and independent continuous-outcome meta-analysis utilities"
+requires-python = ">=3.11"
+license = {file = "LICENSE"}
+authors = [{name = "Jie Jin"}]
+dependencies = ["numpy>=1.26", "Pillow>=10"]
+
+[project.scripts]
+scientific-digitizer = "digitizer.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["digitizer*"]
+
+[tool.setuptools.package-data]
+digitizer = ["point_editor.html"]
